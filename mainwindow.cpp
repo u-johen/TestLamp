@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cmds.insert(0x13,setOff);
     cmds.insert(0x20,setColor);
 
-     qDebug() << "strt";
+     //qDebug() << "strt";
      curEo = (ExecObj*)setOff;
      curEo->Execute(nullptr, 0);
 
@@ -46,6 +46,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    sok->disconnectFromHost();
+
+    foreach (ExecObj* eo, cmds){
+        delete eo;
+    }
+
+
+    delete sok;
+
+
 
     delete ui;
 }
@@ -118,34 +128,40 @@ void MainWindow::chkAndRcvData(QDataStream* stream){
 
 void MainWindow::onSokConnected()
 {
-  qDebug()  <<"ok!!";
-  QByteArray bts = QByteArray();
-  
-  bts.append(0x12);
-  bts.append((char)0);
-  bts.append((char)0);
+    qDebug()  << "Connected";
 
-  bts.append(0x20);
-  bts.append((char)0);
-  bts.append((char)3);
-  bts.append((char)0);
-  bts.append((char)110);
-  bts.append((char)0);
+//Можно послать в эхо
+//  QByteArray bts = QByteArray();
+
+//  bts.append(0x12);
+//  bts.append((char)0);
+//  bts.append((char)0);
+
+//  bts.append(0x20);
+//  bts.append((char)0);
+//  bts.append((char)3);
+//  bts.append((char)220);
+//  bts.append((char)100);
+//  bts.append((char)70);
 
 //  bts.append(0x13);
 //  bts.append((char)0);
 //  bts.append((char)0);
+//  sok->write(bts);
 
+}
 
+void MainWindow::onSokDisconnected()
+{
 
-
-  sok->write(bts);
-
+    qDebug() <<"Connection to the server is lost";
+    this->close();
 }
 
 void MainWindow::onSokDisplayError(QAbstractSocket::SocketError socketError)
 {
-     qDebug() <<"err!";
+     qDebug() <<"Connection error";
+     this->close();
 
 }
 
@@ -155,7 +171,7 @@ void MainWindow::onSokReadyRead(){ //сокете появились данны�
    stream.setByteOrder(QDataStream::BigEndian); //не знаю, как этот параметр ведет себя на разных платфорамах - поэтому ставлю принудительно
 
     while(sok->bytesAvailable()>0){
-        
+
         //В этом методе содержится потенциальная проблема. Если отправитель специально пришлет блок данных с неверно указанной длиной
         //то либо данные будут интерпретеироваться как команды, либо наоборот.  так же возмоно бесконечное ожидание полного блока данных
         //В рамках существующего протокола обмена, мне кажется, проблема не решаема.

@@ -1,3 +1,4 @@
+//абстактный класс  - содержит метод меняющий цвет фона окна
 
 #include "execobj.h"
 #include <QMainWindow>
@@ -12,8 +13,7 @@ class FormColorOperator : public ExecObj
 {
 protected:
   QMainWindow* mW;
-//  QColor color;
-//  bool clrIsSetd;
+
   void SetColorToMW( QColor clrForSet); //Меняет цвет
 
 };

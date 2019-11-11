@@ -11,15 +11,18 @@ void FormPaintExec::Execute(QByteArray* readedData, quint16 dataLen)
 
     if (dataLen >=3){ // если есть нужное кол-во данныхпробуем изготовить цвет
           // Тупо считаем что RGB - первые три байта в массиве
-          int R = (*readedData)[0];
-          int G=  (*readedData)[1];
-          int B = (*readedData)[2];
-           //QColor color = QColor(120,G,B);
-          QColor color = QColor(R,G,B);
-         // QColor color =  QColor(Qt::green);
-         // color.setAlpha(200);
+          quint8 R =  (*readedData)[0];
+          quint8 G=  (*readedData)[1];
+          quint8 B = (*readedData)[2];
 
-          //тут нужно поределить включен фонарь или нет
+//           qDebug()  << R;
+//           qDebug()  << G;
+//           qDebug()  << B;
+
+          QColor color = QColor::fromRgb(R,G,B);
+
+
+          //тут нужно определить включен фонарь или нет
           QColor curClr =  mW->palette().background().color(); //текущий цвет
           if (curClr!= QColor(Qt::black)) // включен
               SetColorToMW(color);

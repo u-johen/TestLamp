@@ -42,7 +42,7 @@ public:
 private slots:
 
     void onSokConnected();
-   // void onSokDisconnected();
+    void onSokDisconnected();
     void onSokReadyRead();
     void onSokDisplayError(QAbstractSocket::SocketError socketError);
 
@@ -54,7 +54,7 @@ private:
 
     Ui::MainWindow *ui;
 
-      QTcpSocket *sok;
+      QTcpSocket* sok;
       QHostAddress host;
       qint16  port;
 
