@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
      connect(sok, SIGNAL(readyRead()), this, SLOT(onSokReadyRead()));
      connect(sok, SIGNAL(connected()), this, SLOT(onSokConnected()));
-     // connect(sok, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
+     connect(sok, SIGNAL(disconnected()), this, SLOT(onSokDisconnected()));
      connect(sok, SIGNAL(error(QAbstractSocket::SocketError)),this, SLOT(onSokDisplayError(QAbstractSocket::SocketError)));
 
 //    host= QHostAddress(SRV_UINT_IP);
